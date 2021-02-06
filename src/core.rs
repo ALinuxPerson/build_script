@@ -1,3 +1,7 @@
+//! Core functionality for `build_script`.
+//! # Notes
+//! 99% of the time, you won't need to use this module. Instead, use the [`basic`](crate::basic)
+//! module instead.
 use crate::cargo_rustc_link_lib;
 use crate::cargo_rustc_link_search;
 use crate::utils::VecExt;
@@ -6,19 +10,36 @@ use std::io::Stdout;
 use std::path::PathBuf;
 use std::{io, str};
 
+/// A build script. This is the main struct for creating cargo arguments.
+/// # Notes
+/// 99% of the time, you won't need this. Instead, use the functions in [`basic`](crate::basic).
 pub struct BuildScript<W: io::Write + Send> {
+    /// The instruction stack. If `now` is `true`, this will not be used.
     instructions: Vec<Instruction>,
+
+    /// Whether or not you should write instructions to `writer` immediately.
     now: bool,
+
+    /// The writer where instructions will be written.
+    /// # Notes
+    /// 99% of the time, you can use the defaults, which is [`io::stdout()`](io::stdout).
     writer: W,
 }
 
 impl Default for BuildScript<Stdout> {
+    /// Get the default build script. Writer is [`io::stdout()`](io::stdout).
+    /// # Notes
+    /// 99% of the time, you can use this associated function instead.
     fn default() -> Self {
         Self::new(io::stdout())
     }
 }
 
 impl<W: io::Write + Send> BuildScript<W> {
+    /// Create a new [`BuildScript`](Self).
+    /// # Notes
+    /// 99% of the time, you won't need to yse this associated function. The defaults can be used instead
+    /// ([`BuildScript::default()`](Self::default)).
     pub fn new(writer: W) -> Self {
         Self {
             writer,
@@ -27,13 +48,16 @@ impl<W: io::Write + Send> BuildScript<W> {
         }
     }
 
+    /// Sets `now` to true.
     pub fn now(&mut self) -> &mut Self {
         self.now = true;
 
         self
     }
 
+    /// Write to `writer`.
     fn write(&mut self, string: &str) {
+        /// Newline.
         const NEWLINE: u8 = b'\n';
 
         let string = {
@@ -52,6 +76,7 @@ impl<W: io::Write + Send> BuildScript<W> {
         write!(self.writer, "{}", string).expect("failed to write to writer")
     }
 
+    /// Write the instruction immediately if `now` is true, else push it to the instruction stack.
     fn parse_instruction(&mut self, instruction: Instruction) {
         if self.now {
             self.write(&instruction.to_string())
@@ -60,12 +85,14 @@ impl<W: io::Write + Send> BuildScript<W> {
         }
     }
 
+    /// Write and remove all the instructions in the stack, starting from the first.
     pub fn build(&mut self) {
         while let Some(instruction) = self.instructions.take_first() {
             self.write(&instruction.to_string())
         }
     }
 
+    /// Wrapper for `cargo:rerun-if-changed=PATH`. This tells Cargo when to rerun the script.
     pub fn cargo_rerun_if_changed(&mut self, path: PathBuf) -> &mut Self {
         let instruction = Instruction::new(
             "rerun-if-changed",
@@ -75,12 +102,14 @@ impl<W: io::Write + Send> BuildScript<W> {
         self.custom_instruction(instruction)
     }
 
+    /// Wrapper for `cargo:rerun-if-env-changed=VAR`. This tells Cargo when to rerun the script.
     pub fn cargo_rerun_if_env_changed(&mut self, var: &str) -> &mut Self {
         let instruction = Instruction::new("rerun-if-env-changed", Value::Singular(var.into()));
 
         self.custom_instruction(instruction)
     }
 
+    /// Wrapper for `cargo:rustc-link-lib=[KIND=]NAME`. This adds a library to link.
     pub fn cargo_rustc_link_lib(
         &mut self,
         kind: Option<cargo_rustc_link_lib::Kind>,
@@ -94,6 +123,7 @@ impl<W: io::Write + Send> BuildScript<W> {
         self.custom_instruction(instruction)
     }
 
+    /// Wrapper for `cargo:rustc-link-search=[KIND=]PATH`. This adds to the library search path.
     pub fn cargo_rustc_link_search(
         &mut self,
         kind: Option<cargo_rustc_link_search::Kind>,
@@ -107,12 +137,14 @@ impl<W: io::Write + Send> BuildScript<W> {
         self.custom_instruction(instruction)
     }
 
+    /// Wrapper for `cargo:rustc-flags=FLAGS`. This passes certain flags to the compiler.
     pub fn cargo_rustc_flags(&mut self, flags: &str) -> &mut Self {
         let instruction = Instruction::new("rustc-flags", Value::Singular(flags.into()));
 
         self.custom_instruction(instruction)
     }
 
+    /// Wrapper for `cargo:rustc-cfg=KEY[="VALUE"]`. This enable compile-time `cfg` settings.
     pub fn cargo_rustc_cfg(&mut self, key: &str, value: Option<&str>) -> &mut Self {
         let instruction = Instruction::new(
             "rustc-flags",
@@ -122,6 +154,7 @@ impl<W: io::Write + Send> BuildScript<W> {
         self.custom_instruction(instruction)
     }
 
+    /// Wrapper for `cargo:rustc-env=VAR=VALUE`. This sets an environment variable.
     pub fn cargo_rustc_env(&mut self, var: &str, value: &str) -> &mut Self {
         let instruction = Instruction::new(
             "rustc-env",
@@ -131,18 +164,22 @@ impl<W: io::Write + Send> BuildScript<W> {
         self.custom_instruction(instruction)
     }
 
+    /// Wrapper for `cargo:rustc-cdylib-link-arg=FLAG`. This passes custom flags to a linker for
+    /// cdylib crates.
     pub fn cargo_rustc_cdylib_link_arg(&mut self, flag: &str) -> &mut Self {
         let instruction = Instruction::new("rustc-cdylib-link-arg", Value::Singular(flag.into()));
 
         self.custom_instruction(instruction)
     }
 
+    /// Wrapper for `cargo:warning=MESSAGE`. This displays a warning on the terminal.
     pub fn cargo_warning(&mut self, message: &str) -> &mut Self {
         let instruction = Instruction::new("warning", Value::Singular(message.into()));
 
         self.custom_instruction(instruction)
     }
 
+    /// Wrapper for `cargo:KEY=VALUE`. This is metadata, used by `links` scripts.
     pub fn cargo_mapping(&mut self, key: &str, value: &str) -> &mut Self {
         let instruction =
             Instruction::new_mapping(Value::UnquotedMapping(key.into(), value.into()));
@@ -150,6 +187,8 @@ impl<W: io::Write + Send> BuildScript<W> {
         self.custom_instruction(instruction)
     }
 
+    /// Pass a custom instruction. Internally, [`BuildScript`](Self) uses this. This may be used
+    /// when `build_script` isn't updated for new instructions yet in the future.
     pub fn custom_instruction(&mut self, instruction: Instruction) -> &mut Self {
         self.parse_instruction(instruction);
 
