@@ -1,4 +1,4 @@
-//! Core functionality for `build_script`.
+//! Core functionality for [`build_script`](crate).
 //! # Notes
 //! 99% of the time, you won't need to use this module. Instead, use the [`basic`](crate::basic)
 //! module instead.
