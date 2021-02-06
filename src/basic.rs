@@ -4,7 +4,6 @@ use crate::{
     cargo_rustc_link_search as cargo_rustc_link_search_,
 };
 use lazy_static::lazy_static;
-use std::io;
 use std::io::Stdout;
 use std::path::PathBuf;
 use std::sync::{LockResult, Mutex, MutexGuard};
