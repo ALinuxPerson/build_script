@@ -6,6 +6,8 @@ edition = "2018"
 license = "MIT"
 description = "A wrapper for build.rs instructions"
 repository = "github.com/ALinuxPerson/build_script"
+keywords = ["script", "build-script", "build", "build-rs"]
+categories = ["development-tools::build-utils"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
