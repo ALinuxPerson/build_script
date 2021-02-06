@@ -4,6 +4,8 @@ version = "0.1.0"
 authors = ["ALinuxPerson <alinuxperson@gmail.com>"]
 edition = "2018"
 license = "MIT"
+description = "A wrapper for build.rs instructions"
+repository = "github.com/ALinuxPerson/build_script"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
