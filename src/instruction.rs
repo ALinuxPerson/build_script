@@ -1,16 +1,26 @@
+//! This contains the [`Instruction`](Instruction) struct.
 use crate::prefix::Prefix;
 use crate::value::Value;
 use std::fmt;
 use std::fmt::Formatter;
 
+/// An instruction. Used as a rusty way to parse arguments in build scripts.
 #[derive(Clone)]
 pub struct Instruction {
+    /// The prefix. Usually [`Cargo`](Prefix::Cargo).
     pub prefix: Prefix,
+
+    /// The name of the instruction. Most of the time it's filled in, only when a new mapping
+    /// [`new_mapping()`](Self::new_mapping) is created it's not.
     pub name: Option<String>,
+
+    /// The [`Value`](Value) of the Instruction.
     pub value: Value,
 }
 
 impl Instruction {
+    /// Create a new Instruction. 99% of the time this should suffice instead of
+    /// [`new_mapping()`](Self::new_mapping).
     pub fn new(name: &str, value: Value) -> Self {
         Self {
             value,
@@ -19,6 +29,11 @@ impl Instruction {
         }
     }
 
+    /// Create a new Instruction Mapping. Only 1% of the time is this proven useful, instead use
+    /// [new()](Self::new).
+    /// # Panics
+    /// This panics if `value` is not a [`Mapping`](Value::Mapping) or
+    /// [`UnquotedMapping`](Value::UnquotedMapping).
     pub fn new_mapping(value: Value) -> Self {
         if value.is_mapping() || value.is_unquoted_mapping() {
             Self {
@@ -31,12 +46,14 @@ impl Instruction {
         }
     }
 
+    /// Set the prefix.
     pub fn prefix(&mut self, prefix: Prefix) -> &mut Self {
         self.prefix = prefix;
 
         self
     }
 
+    /// Set the name.
     pub fn name(&mut self, name: &str) -> &mut Self {
         self.name = Some(name.into());
 
