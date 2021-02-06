@@ -5,7 +5,7 @@ authors = ["ALinuxPerson <alinuxperson@gmail.com>"]
 edition = "2018"
 license = "MIT"
 description = "A wrapper for build.rs instructions"
-repository = "github.com/ALinuxPerson/build_script"
+repository = "https://github.com/ALinuxPerson/build_script"
 keywords = ["script", "build-script", "build", "build-rs"]
 categories = ["development-tools::build-utils"]
 
