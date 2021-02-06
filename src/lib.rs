@@ -1,4 +1,4 @@
-//! A wrapper for build.rs instructions.
+//! A wrapper for `build.rs` instructions.
 //! # Examples
 //! ```rust
 //! use build_script::{cargo_rustc_link_lib, cargo_rustc_link_search, BuildScript, Instruction, Value};
