@@ -1,16 +1,36 @@
+//! A wrapper for [`cargo_rustc_link_search`](crate::BuildScript::cargo_rustc_link_search).
+/// A kind for [`cargo_rustc_link_search`](crate::BuildScript::cargo_rustc_link_search).
 pub enum Kind {
+    /// Known to the compiler as [`dependency`](Self::DEPENDENCY).
     Dependency,
+
+    /// Known to the compiler as [`crate`](Self::CRATE).
     Crate,
+
+    /// Known to the compiler as [`native`](Self::NATIVE).
     Native,
+
+    /// Known to the compiler as [`framework`](Self::FRAMEWORK).
     Framework,
+
+    /// Known to the compiler as [`all`](Self::ALL).
     All,
 }
 
 impl Kind {
+    /// Known to this library as [`Dependency`](Self::Dependency).
     pub const DEPENDENCY: &'static str = "dependency";
+
+    /// Known to this library as [`Crate`](Self::Crate).
     pub const CRATE: &'static str = "crate";
+
+    /// Known to this library as [`Native`](Self::Native).
     pub const NATIVE: &'static str = "native";
+
+    /// Known to this library as [`Framework`](Self::Framework).
     pub const FRAMEWORK: &'static str = "framework";
+
+    /// Known to this library as [`All`](Self::All).
     pub const ALL: &'static str = "all";
 }
 
