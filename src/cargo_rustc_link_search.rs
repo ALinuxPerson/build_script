@@ -46,3 +46,22 @@ impl Into<String> for Kind {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::Kind;
+
+    #[test]
+    fn test_into_string() {
+        let kind: String = Kind::Dependency.into();
+        assert_eq!(kind, Kind::DEPENDENCY);
+        let kind: String = Kind::Crate.into();
+        assert_eq!(kind, Kind::CRATE);
+        let kind: String = Kind::Native.into();
+        assert_eq!(kind, Kind::NATIVE);
+        let kind: String = Kind::Framework.into();
+        assert_eq!(kind, Kind::FRAMEWORK);
+        let kind: String = Kind::All.into();
+        assert_eq!(kind, Kind::ALL);
+    }
+}
