@@ -32,3 +32,18 @@ impl Into<String> for Kind {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::Kind;
+
+    #[test]
+    fn test_into_string() {
+        let kind: String = Kind::DynamicLibrary.into();
+        assert_eq!(kind, Kind::DYNAMIC_LIBRARY);
+        let kind: String = Kind::Static.into();
+        assert_eq!(kind, Kind::STATIC);
+        let kind: String = Kind::Framework.into();
+        assert_eq!(kind, Kind::FRAMEWORK)
+    }
+}
