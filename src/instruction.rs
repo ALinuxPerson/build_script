@@ -77,3 +77,51 @@ impl fmt::Display for Instruction {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{Instruction, Value, Prefix};
+
+    macro_rules! new_wrong_value_test {
+        ($name:ident, $value:expr) => {
+            #[test]
+            #[should_panic]
+            fn $name() {
+                Instruction::new_mapping($value);
+            }
+        };
+    }
+
+    macro_rules! new_right_value_test {
+        ($name:ident, $value:expr) => {
+            #[test]
+            fn $name() {
+                Instruction::new_mapping($value);
+            }
+        };
+    }
+
+    #[test]
+    fn test_new() {
+        let value = Value::Singular("singular".into());
+        let instruction = Instruction::new("name", value);
+        assert!(matches!(instruction.prefix, Prefix::Cargo));
+        assert_eq!(instruction.name.expect("name is none"), "name");
+        assert!(instruction.value.is_singular());
+    }
+
+    #[test]
+    fn test_new_mapping() {
+        let value = Value::Mapping("key".into(), "value".into());
+        let instruction = Instruction::new_mapping(value);
+        assert!(instruction.name.is_none());
+    }
+
+    new_wrong_value_test!(test_new_mapping_fails_if_value_singular, Value::Singular("".into()));
+    new_wrong_value_test!(test_new_mapping_fails_if_value_optional_key, Value::OptionalKey(None, "".into()));
+    new_wrong_value_test!(test_new_mapping_fails_if_value_unquoted_optional_key, Value::UnquotedOptionalKey(None, "".into()));
+    new_wrong_value_test!(test_new_mapping_fails_if_value_optional_value, Value::OptionalValue("".into(), None));
+    new_wrong_value_test!(test_new_mapping_fails_if_value_unquoted_optional_value, Value::UnquotedOptionalValue("".into(), None));
+    new_right_value_test!(test_new_mapping_succeeds_if_value_mapping, Value::Mapping("".into(), "".into()));
+    new_right_value_test!(test_new_mapping_succeeds_if_value_unquoted_mapping, Value::UnquotedMapping("".into(), "".into()));
+}
