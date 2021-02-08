@@ -26,3 +26,28 @@ impl fmt::Display for Prefix {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::Prefix;
+
+    #[test]
+    fn test_default() {
+        let prefix = Prefix::default();
+        assert!(matches!(prefix, Prefix::Cargo))
+    }
+
+    #[test]
+    fn test_display_cargo() {
+        let prefix = Prefix::Cargo;
+        let string = format!("{}", prefix);
+        assert_eq!(string, "cargo")
+    }
+
+    #[test]
+    fn test_display_custom() {
+        let prefix = Prefix::Custom("custom".into());
+        let string = format!("{}", prefix);
+        assert_eq!(string, "custom")
+    }
+}
