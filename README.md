@@ -9,6 +9,11 @@
     <p>A wrapper for build.rs instructions</p>
 </div>
 
+# Why?
+I made this because I felt like the way you pass instructions to `build.rs` makes it very easy to make mistakes 
+(especially when using strings) and it just felt odd that rust doesn't provide an api or an official external crate 
+(like [`rand`](https://crates.io/crates/rand)).
+
 # Installation
 Add this to your `Cargo.toml`:
 ```toml
@@ -51,3 +56,34 @@ fn main() {
 ```
 
 For more information see the documentation.
+
+# Terminology
+## Instruction
+The instruction is what is passed to cargo. An example would be `cargo:rerun-if-env-changed=ENV`. This example will
+also be dissected below.
+
+The instruction is split into three parts:
+### Prefix
+The prefix is the string before the delimiter `:`: `cargo`.
+
+Usually the prefix is `cargo`, however in this crate other, custom prefixes can be used for future compatibility in case
+another prefix is added.
+
+### Name
+The name is the string in between the delimiters `:` and `=`: `rerun-if-env-changed`.
+
+If the name is unknown, the instruction will automatically be a mapping (see below).
+### Value
+The value is the string after the delimiter `=`: `ENV`.
+
+This represents the value of the instruction.
+## Mapping
+There is a type of instruction which is a mapping: `cargo:KEY=VALUE`.
+
+This is, verbatim:
+
+> Metadata, used by `links` scripts.
+
+The source can be found [here](https://doc.rust-lang.org/cargo/reference/build-scripts.html).
+
+This is used when an instruction name is unknown.
