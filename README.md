@@ -7,7 +7,7 @@
 Add this to your `Cargo.toml`:
 ```toml
 [build-dependencies]
-build_script = "0.1.0"
+build_script = "0.1.2"
 ```
 
 # Examples
