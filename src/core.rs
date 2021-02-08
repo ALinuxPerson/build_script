@@ -147,7 +147,7 @@ impl<W: io::Write + Send> BuildScript<W> {
     /// Wrapper for `cargo:rustc-cfg=KEY[="VALUE"]`. This enable compile-time `cfg` settings.
     pub fn cargo_rustc_cfg(&mut self, key: &str, value: Option<&str>) -> &mut Self {
         let instruction = Instruction::new(
-            "rustc-flags",
+            "rustc-cfg",
             Value::OptionalValue(key.into(), value.map(Into::into)),
         );
 
@@ -337,7 +337,7 @@ mod tests {
         let output = parse_bytes_to_lines(writer);
         let expected = vec![
             "cargo:rustc-cfg=key",
-            "cargo:rustc-cfg=key=value"
+            "cargo:rustc-cfg=key=\"value\""
         ];
 
         assert_eq!(output, expected)
