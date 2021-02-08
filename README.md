@@ -1,5 +1,11 @@
 <div align="center">
     <h1><b>build_script</b></h1>
+    <a href="https://www.crates.io/crates/build_script">
+        <img src="https://img.shields.io/crates/v/serde.svg">
+    </a>
+    <a href="https://www.docs.rs/build_script">
+        <img src="https://docs.rs/build_script/badge.svg">
+    </a>
     <p>A wrapper for build.rs instructions</p>
 </div>
 
