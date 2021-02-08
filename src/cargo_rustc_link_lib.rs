@@ -1,5 +1,6 @@
 //! A wrapper for [`cargo_rustc_link_lib`](crate::BuildScript::cargo_rustc_link_lib).
 /// A kind for [`cargo_rustc_link_lib`](crate::BuildScript::cargo_rustc_link_lib).
+#[derive(Copy, Clone)]
 pub enum Kind {
     /// Known to the compiler as [`dylib`](Self::DYNAMIC_LIBRARY).
     DynamicLibrary,
