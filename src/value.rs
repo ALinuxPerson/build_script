@@ -55,7 +55,7 @@ impl Value {
 
     /// Returns `true` if the value is an [`UnquotedOptionalValue`](Self::UnquotedOptionalValue) value.
     pub fn is_unquoted_optional_value(&self) -> bool {
-        matches!(*self, Self::Mapping(_, _))
+        matches!(*self, Self::UnquotedOptionalValue(_, _))
     }
 
     /// Returns `true` if the value is an [`UnquotedMapping`](Self::UnquotedMapping) value.
