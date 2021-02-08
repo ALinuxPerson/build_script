@@ -13,3 +13,6 @@ categories = ["development-tools::build-utils"]
 
 [dependencies]
 lazy_static = "1.4.0"
+
+[dev-dependencies]
+gag = "0.1.10"
