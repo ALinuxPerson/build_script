@@ -101,3 +101,74 @@ impl fmt::Display for Value {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::Value;
+
+    macro_rules! new_display_test {
+        ($name:ident, $value:expr, $expected:literal) => {
+            #[test]
+            fn $name() {
+                let value = $value;
+                let output = format!("{}", value);
+                let expected = $expected;
+
+                assert_eq!(output, expected)
+            }
+        };
+    }
+
+    #[test]
+    fn test_is_singular() {
+        assert!(Value::Singular("".into()).is_singular())
+    }
+
+    new_display_test!(test_singular_display, Value::Singular("singular".into()), "singular");
+
+    #[test]
+    fn test_is_mapping() {
+        assert!(Value::Mapping("".into(), "".into()).is_mapping())
+    }
+
+    new_display_test!(test_mapping_display, Value::Mapping("key".into(), "value".into()), "key=\"value\"");
+
+    #[test]
+    fn test_is_optional_key() {
+        assert!(Value::OptionalKey(None, "".into()).is_optional_key())
+    }
+
+    new_display_test!(test_optional_key_display, Value::OptionalKey(Some("key".into()), "value".into()), "key=\"value\"");
+    new_display_test!(test_optional_key_display_none, Value::OptionalKey(None, "value".into()), "value");
+
+    #[test]
+    fn test_is_unquoted_optional_key() {
+        assert!(Value::UnquotedOptionalKey(None, "".into()).is_unquoted_optional_key())
+    }
+
+    new_display_test!(test_unquoted_optional_key_display, Value::UnquotedOptionalKey(Some("key".into()), "value".into()), "key=value");
+    new_display_test!(test_unquoted_optional_key_display_none, Value::UnquotedOptionalKey(None, "value".into()), "value");
+
+    #[test]
+    fn test_is_optional_value() {
+        assert!(Value::OptionalValue("".into(), None).is_optional_value())
+    }
+
+    new_display_test!(test_optional_value_display, Value::OptionalValue("key".into(), Some("value".into())), "key=\"value\"");
+    new_display_test!(test_optional_value_display_none, Value::OptionalValue("key".into(), None), "key");
+
+    #[test]
+    fn test_is_unquoted_optional_value() {
+        assert!(Value::UnquotedOptionalValue("".into(), None).is_unquoted_optional_value())
+    }
+
+    new_display_test!(test_unquoted_optional_value_display, Value::UnquotedOptionalValue("key".into(), Some("value".into())), "key=value");
+    new_display_test!(test_unquoted_optional_value_display_none, Value::UnquotedOptionalValue("key".into(), None), "key");
+
+    #[test]
+    fn test_is_unquoted_mapping() {
+        assert!(Value::UnquotedMapping("".into(), "".into()).is_unquoted_mapping())
+    }
+
+    new_display_test!(test_unquoted_mapping_display, Value::UnquotedMapping("key".into(), "value".into()), "key=value");
+}
