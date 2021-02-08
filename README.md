@@ -1,5 +1,5 @@
 <div align="center">
-    <h1><b>build_script</b></h1>
+    <h1><b>Build Script</b></h1>
     <a href="https://www.crates.io/crates/build_script">
         <img src="https://img.shields.io/crates/v/serde.svg">
     </a>
