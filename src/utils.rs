@@ -24,3 +24,27 @@ impl<T> VecExt<T> for Vec<T> {
         self.take(0)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::VecExt;
+
+    #[test]
+    fn test_take() {
+        let mut vec = vec![1, 2, 3, 4, 5];
+        let first = vec.take(0);
+        assert_eq!(first, Some(1));
+        let none = vec.take(999);
+        assert!(none.is_none())
+    }
+
+    #[test]
+    fn test_take_first() {
+        let mut vec = vec![1, 2, 3, 4, 5];
+        let first = vec.take_first();
+        assert_eq!(first, Some(1));
+        vec.clear();
+        let none = vec.take_first();
+        assert!(none.is_none())
+    }
+}
