@@ -103,8 +103,8 @@ pub fn cargo_mapping(key: impl Into<String>, value: impl Into<String>) {
 #[cfg(test)]
 mod tests {
     use gag::BufferRedirect;
-    use std::io::Read;
     use serial_test::serial;
+    use std::io::Read;
 
     fn test(func: impl Fn(), expected: &str) -> bool {
         let mut output = String::new();
@@ -120,19 +120,26 @@ mod tests {
             #[test]
             #[serial]
             fn $name() {
-                assert!(
-                    test(
-                        $func,
-                        $expected
-                    )
-                )
+                assert!(test($func, $expected))
             }
         };
     }
 
-    new_test!(test_cargo_rerun_if_changed, || super::cargo_rerun_if_changed("path"), "cargo:rerun-if-changed=path");
-    new_test!(test_cargo_rerun_if_env_changed, || super::cargo_rerun_if_env_changed("var"), "cargo:rerun-if-env-changed=var");
-    new_test!(test_cargo_rustc_link_lib, || super::cargo_rustc_link_lib("name"), "cargo:rustc-link-lib=name");
+    new_test!(
+        test_cargo_rerun_if_changed,
+        || super::cargo_rerun_if_changed("path"),
+        "cargo:rerun-if-changed=path"
+    );
+    new_test!(
+        test_cargo_rerun_if_env_changed,
+        || super::cargo_rerun_if_env_changed("var"),
+        "cargo:rerun-if-env-changed=var"
+    );
+    new_test!(
+        test_cargo_rustc_link_lib,
+        || super::cargo_rustc_link_lib("name"),
+        "cargo:rustc-link-lib=name"
+    );
 
     #[test]
     #[serial]
@@ -142,40 +149,79 @@ mod tests {
         let kinds = [Kind::Framework, Kind::Static, Kind::DynamicLibrary];
 
         for &kind in kinds.iter() {
-            assert!(
-                test(
-                    || super::cargo_rustc_link_lib_mapping(kind, "name"),
-                    &format!("cargo:rustc-link-lib={}=name", { let kind: String = kind.into(); kind })
-                )
-            )
+            assert!(test(
+                || super::cargo_rustc_link_lib_mapping(kind, "name"),
+                &format!("cargo:rustc-link-lib={}=name", {
+                    let kind: String = kind.into();
+                    kind
+                })
+            ))
         }
     }
 
-    new_test!(test_cargo_rustc_link_search, || super::cargo_rustc_link_search("path"), "cargo:rustc-link-search=path");
+    new_test!(
+        test_cargo_rustc_link_search,
+        || super::cargo_rustc_link_search("path"),
+        "cargo:rustc-link-search=path"
+    );
 
     #[test]
     #[serial]
     fn test_cargo_rustc_link_search_mapping() {
         use crate::cargo_rustc_link_search::Kind;
 
-        let kinds = [Kind::Framework, Kind::All, Kind::Crate, Kind::Dependency, Kind::Native];
+        let kinds = [
+            Kind::Framework,
+            Kind::All,
+            Kind::Crate,
+            Kind::Dependency,
+            Kind::Native,
+        ];
 
         for &kind in kinds.iter() {
-            assert!(
-                test(
-                    || super::cargo_rustc_link_search_mapping(kind, "path"),
-                    &format!("cargo:rustc-link-search={}=path", { let kind: String = kind.into(); kind })
-                )
-            )
+            assert!(test(
+                || super::cargo_rustc_link_search_mapping(kind, "path"),
+                &format!("cargo:rustc-link-search={}=path", {
+                    let kind: String = kind.into();
+                    kind
+                })
+            ))
         }
     }
 
-    new_test!(test_cargo_rustc_flags, || super::cargo_rustc_flags("flags"), "cargo:rustc-flags=flags");
-    new_test!(test_cargo_rustc_cfg, || super::cargo_rustc_cfg("key"), "cargo:rustc-cfg=key");
-    new_test!(test_cargo_rustc_cfg_mapping, || super::cargo_rustc_cfg_mapping("key", "value"), "cargo:rustc-cfg=key=\"value\"");
-    new_test!(test_cargo_rustc_env, || super::cargo_rustc_env("var", "value"), "cargo:rustc-env=var=value");
-    new_test!(test_cargo_rustc_cdylib_link_arg, || super::cargo_rustc_cdylib_link_arg("flag"), "cargo:rustc-cdylib-link-arg=flag");
-    new_test!(test_cargo_warning, || super::cargo_warning("message"), "cargo:warning=message");
-    new_test!(test_cargo_mapping, || super::cargo_mapping("key", "value"), "cargo:key=value");
+    new_test!(
+        test_cargo_rustc_flags,
+        || super::cargo_rustc_flags("flags"),
+        "cargo:rustc-flags=flags"
+    );
+    new_test!(
+        test_cargo_rustc_cfg,
+        || super::cargo_rustc_cfg("key"),
+        "cargo:rustc-cfg=key"
+    );
+    new_test!(
+        test_cargo_rustc_cfg_mapping,
+        || super::cargo_rustc_cfg_mapping("key", "value"),
+        "cargo:rustc-cfg=key=\"value\""
+    );
+    new_test!(
+        test_cargo_rustc_env,
+        || super::cargo_rustc_env("var", "value"),
+        "cargo:rustc-env=var=value"
+    );
+    new_test!(
+        test_cargo_rustc_cdylib_link_arg,
+        || super::cargo_rustc_cdylib_link_arg("flag"),
+        "cargo:rustc-cdylib-link-arg=flag"
+    );
+    new_test!(
+        test_cargo_warning,
+        || super::cargo_warning("message"),
+        "cargo:warning=message"
+    );
+    new_test!(
+        test_cargo_mapping,
+        || super::cargo_mapping("key", "value"),
+        "cargo:key=value"
+    );
 }
-

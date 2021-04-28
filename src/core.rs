@@ -208,7 +208,9 @@ mod tests {
     }
 
     fn get_from_vec<T>(vec: Vec<T>, index: usize) -> T {
-        vec.into_iter().nth(index).expect("there was supposed to be an element here")
+        vec.into_iter()
+            .nth(index)
+            .expect("there was supposed to be an element here")
     }
 
     #[test]
@@ -244,7 +246,7 @@ mod tests {
         let lines = parse_bytes_to_lines(writer);
         let expected = vec![
             "cargo:key=value".to_string(),
-            "cargo:second=mapping".to_string()
+            "cargo:second=mapping".to_string(),
         ];
         assert_eq!(lines, expected)
     }
@@ -253,7 +255,9 @@ mod tests {
     fn test_cargo_rerun_if_changed() {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
-        build_script.cargo_rerun_if_changed("library.h".into()).build();
+        build_script
+            .cargo_rerun_if_changed("library.h".into())
+            .build();
         let output = get_from_vec(parse_bytes_to_lines(writer), 0);
         let expected = "cargo:rerun-if-changed=library.h";
         assert_eq!(output, expected)
@@ -336,10 +340,7 @@ mod tests {
         build_script.cargo_rustc_cfg("key", "value".into());
         build_script.build();
         let output = parse_bytes_to_lines(writer);
-        let expected = vec![
-            "cargo:rustc-cfg=key",
-            "cargo:rustc-cfg=key=\"value\""
-        ];
+        let expected = vec!["cargo:rustc-cfg=key", "cargo:rustc-cfg=key=\"value\""];
 
         assert_eq!(output, expected)
     }
@@ -392,7 +393,8 @@ mod tests {
     fn test_custom_instruction() {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
-        let instruction = Instruction::new("some-instruction", Value::Singular("Hello, World!".into()));
+        let instruction =
+            Instruction::new("some-instruction", Value::Singular("Hello, World!".into()));
         build_script.custom_instruction(instruction).build();
         let output = get_from_vec(parse_bytes_to_lines(writer), 0);
         let expected = "cargo:some-instruction=Hello, World!";

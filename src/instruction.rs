@@ -78,7 +78,7 @@ impl fmt::Display for Instruction {
 
 #[cfg(test)]
 mod tests {
-    use crate::{Instruction, Value, Prefix};
+    use crate::{Instruction, Prefix, Value};
 
     macro_rules! new_wrong_value_test {
         ($name:ident, $value:expr) => {
@@ -115,11 +115,32 @@ mod tests {
         assert!(instruction.name.is_none());
     }
 
-    new_wrong_value_test!(test_new_mapping_fails_if_value_singular, Value::Singular("".into()));
-    new_wrong_value_test!(test_new_mapping_fails_if_value_optional_key, Value::OptionalKey(None, "".into()));
-    new_wrong_value_test!(test_new_mapping_fails_if_value_unquoted_optional_key, Value::UnquotedOptionalKey(None, "".into()));
-    new_wrong_value_test!(test_new_mapping_fails_if_value_optional_value, Value::OptionalValue("".into(), None));
-    new_wrong_value_test!(test_new_mapping_fails_if_value_unquoted_optional_value, Value::UnquotedOptionalValue("".into(), None));
-    new_right_value_test!(test_new_mapping_succeeds_if_value_mapping, Value::Mapping("".into(), "".into()));
-    new_right_value_test!(test_new_mapping_succeeds_if_value_unquoted_mapping, Value::UnquotedMapping("".into(), "".into()));
+    new_wrong_value_test!(
+        test_new_mapping_fails_if_value_singular,
+        Value::Singular("".into())
+    );
+    new_wrong_value_test!(
+        test_new_mapping_fails_if_value_optional_key,
+        Value::OptionalKey(None, "".into())
+    );
+    new_wrong_value_test!(
+        test_new_mapping_fails_if_value_unquoted_optional_key,
+        Value::UnquotedOptionalKey(None, "".into())
+    );
+    new_wrong_value_test!(
+        test_new_mapping_fails_if_value_optional_value,
+        Value::OptionalValue("".into(), None)
+    );
+    new_wrong_value_test!(
+        test_new_mapping_fails_if_value_unquoted_optional_value,
+        Value::UnquotedOptionalValue("".into(), None)
+    );
+    new_right_value_test!(
+        test_new_mapping_succeeds_if_value_mapping,
+        Value::Mapping("".into(), "".into())
+    );
+    new_right_value_test!(
+        test_new_mapping_succeeds_if_value_unquoted_mapping,
+        Value::UnquotedMapping("".into(), "".into())
+    );
 }
