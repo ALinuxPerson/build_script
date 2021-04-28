@@ -5,7 +5,7 @@ use std::fmt;
 use std::fmt::Formatter;
 
 /// An instruction. Used as a rusty way to parse arguments in build scripts.
-#[derive(Clone)]
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub struct Instruction {
     /// The prefix. Usually [`Cargo`](Prefix::Cargo).
     pub prefix: Prefix,

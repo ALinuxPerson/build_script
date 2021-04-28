@@ -2,7 +2,7 @@
 use std::fmt;
 
 /// The prefix. Usually [`Cargo`](Self::Cargo).
-#[derive(Clone)]
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub enum Prefix {
     /// The cargo prefix. 99% of the time this is used.
     Cargo,

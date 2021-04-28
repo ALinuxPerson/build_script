@@ -1,6 +1,6 @@
 //! A wrapper for [`cargo_rustc_link_search`](crate::BuildScript::cargo_rustc_link_search).
 /// A kind for [`cargo_rustc_link_search`](crate::BuildScript::cargo_rustc_link_search).
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub enum Kind {
     /// Known to the compiler as [`dependency`](Self::DEPENDENCY).
     Dependency,

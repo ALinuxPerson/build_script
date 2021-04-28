@@ -13,6 +13,7 @@ use std::{io, str};
 /// A build script. This is the main struct for creating cargo arguments.
 /// # Notes
 /// 99% of the time, you won't need this. Instead, use the functions in [`basic`](crate::basic).
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub struct BuildScript<W: io::Write + Send> {
     /// The instruction stack. If `now` is `true`, this will not be used.
     instructions: Vec<Instruction>,

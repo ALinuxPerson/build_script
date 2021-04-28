@@ -2,7 +2,7 @@
 use std::fmt;
 
 /// The value of an [`Instruction`](crate::Instruction).
-#[derive(Clone)]
+#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub enum Value {
     /// A singular value.
     Singular(String),
