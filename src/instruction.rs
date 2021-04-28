@@ -66,14 +66,12 @@ impl fmt::Display for Instruction {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         if let Some(name) = &self.name {
             write!(f, "{}:{}={}", self.prefix, name, self.value)
+        } else if let Value::Mapping(key, value) = &self.value {
+            write!(f, "{}:{}={}", self.prefix, key, value)
+        } else if let Value::UnquotedMapping(key, value) = &self.value {
+            write!(f, "{}:{}={}", self.prefix, key, value)
         } else {
-            if let Value::Mapping(key, value) = &self.value {
-                write!(f, "{}:{}={}", self.prefix, key, value)
-            } else if let Value::UnquotedMapping(key, value) = &self.value {
-                write!(f, "{}:{}={}", self.prefix, key, value)
-            } else {
-                panic!("value type must be [Unquoted]Mapping")
-            }
+            panic!("value type must be [Unquoted]Mapping")
         }
     }
 }
