@@ -18,13 +18,13 @@ static BUILD_SCRIPT: Lazy<Mutex<BuildScript<Stdout>>> = Lazy::new(|| {
     Mutex::new(build_script)
 });
 
-/// Lock the mutex of [`BUILD_SCRIPT`](static@BUILD_SCRIPT). This panics if the mutex is poisoned.
+/// Lock the mutex of build script mutex. This panics if the mutex is poisoned.
 fn lock_mutex<T>(lock: LockResult<MutexGuard<T>>) -> MutexGuard<T> {
     lock.expect("mutex is poisoned")
 }
 
-/// Wrapper for locking the mutex in [`BUILD_SCRIPT`](static@BUILD_SCRIPT). Internally this handles locking
-/// the mutex of [`BUILD_SCRIPT`](statc@BUILD_SCRIPT) and then panicking if mutex is poisoned.
+/// Wrapper for locking the build script mutex. Internally this handles locking the build script
+/// mutex and then panicking if mutex is poisoned.
 fn build_script() -> MutexGuard<'static, BuildScript<Stdout>> {
     lock_mutex(BUILD_SCRIPT.lock())
 }
