@@ -31,7 +31,7 @@
 //! build_script.build();
 //! ```
 #![warn(missing_docs)]
-#![warn(missing_crate_level_docs)]
+#![warn(rustdoc::missing_crate_level_docs)]
 pub mod basic;
 pub mod cargo_rustc_link_lib;
 pub mod cargo_rustc_link_search;
