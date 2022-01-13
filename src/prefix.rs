@@ -20,10 +20,12 @@ impl Default for Prefix {
 
 impl fmt::Display for Prefix {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Self::Cargo => write!(f, "cargo"),
-            Self::Custom(prefix) => write!(f, "{}", prefix),
-        }
+        let prefix = match self {
+            Self::Cargo => "cargo",
+            Self::Custom(prefix) => prefix,
+        };
+
+        prefix.fmt(f)
     }
 }
 
