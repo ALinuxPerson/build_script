@@ -23,14 +23,20 @@ impl Kind {
     pub const FRAMEWORK: &'static str = "framework";
 }
 
-#[allow(clippy::from_over_into)]
-impl Into<String> for Kind {
-    fn into(self) -> String {
-        match self {
-            Self::DynamicLibrary => Self::DYNAMIC_LIBRARY.into(),
-            Self::Static => Self::STATIC.into(),
-            Self::Framework => Self::FRAMEWORK.into(),
+impl From<Kind> for &'static str {
+    fn from(kind: Kind) -> Self {
+        match kind {
+            Kind::DynamicLibrary => Kind::DYNAMIC_LIBRARY,
+            Kind::Static => Kind::STATIC,
+            Kind::Framework => Kind::FRAMEWORK,
         }
+    }
+}
+
+impl From<Kind> for String {
+    fn from(kind: Kind) -> Self {
+        let kind: &str = kind.into();
+        kind.into()
     }
 }
 
