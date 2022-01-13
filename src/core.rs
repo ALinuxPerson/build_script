@@ -13,8 +13,7 @@ use std::{io, str};
 /// A build script. This is the main struct for creating cargo arguments.
 /// # Notes
 /// 99% of the time, you won't need this. Instead, use the functions in [`basic`](crate::basic).
-#[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
-pub struct BuildScript<W: io::Write + Send> {
+pub struct BuildScript<'w> {
     /// The instruction stack. If `now` is `true`, this will not be used.
     instructions: Vec<Instruction>,
 
@@ -24,31 +23,32 @@ pub struct BuildScript<W: io::Write + Send> {
     /// The writer where instructions will be written.
     /// # Notes
     /// 99% of the time, you can use the defaults, which is [`io::stdout()`](io::stdout).
-    writer: W,
+    writer: &'w mut (dyn io::Write + Send),
 }
 
-impl Default for BuildScript<Stdout> {
+impl Default for BuildScript<'static> {
     /// Get the default build script. Writer is [`io::stdout()`](io::stdout).
     /// # Notes
     /// 99% of the time, you can use this associated function instead.
     fn default() -> Self {
-        Self::new(io::stdout())
+        let stdout = Box::new(io::stdout());
+        let stdout = Box::leak(stdout);
+        Self::new(stdout)
     }
 }
 
-impl<W: io::Write + Send> BuildScript<W> {
+impl<'w> BuildScript<'w> {
     /// Create a new [`BuildScript`](Self).
     /// # Notes
     /// 99% of the time, you won't need to yse this associated function. The defaults can be used instead
     /// ([`BuildScript::default()`](Self::default)).
-    pub fn new(writer: W) -> Self {
+    pub fn new(writer: &'w mut (dyn io::Write + Send)) -> Self {
         Self {
             writer,
             instructions: Vec::new(),
             now: false,
         }
     }
-
     /// Sets `now` to true.
     pub fn now(&mut self) -> &mut Self {
         self.now = true;
@@ -202,7 +202,7 @@ mod tests {
     use super::BuildScript;
     use crate::{Instruction, Value};
 
-    fn parse_bytes_to_lines(bytes: Vec<u8>) -> Vec<String> {
+    fn parse_bytes_to_lines(bytes: &[u8]) -> Vec<String> {
         let bytes = String::from_utf8_lossy(&bytes).to_string();
         bytes.lines().map(str::to_owned).collect()
     }

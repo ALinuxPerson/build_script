@@ -11,7 +11,7 @@ use std::path::PathBuf;
 use std::sync::{LockResult, Mutex, MutexGuard};
 use once_cell::sync::Lazy;
 
-static BUILD_SCRIPT: Lazy<Mutex<BuildScript<Stdout>>> = Lazy::new(|| {
+static BUILD_SCRIPT: Lazy<Mutex<BuildScript>> = Lazy::new(|| {
     let mut build_script = BuildScript::default();
     build_script.now();
 
@@ -25,7 +25,7 @@ fn lock_mutex<T>(lock: LockResult<MutexGuard<T>>) -> MutexGuard<T> {
 
 /// Wrapper for locking the build script mutex. Internally this handles locking the build script
 /// mutex and then panicking if mutex is poisoned.
-fn build_script() -> MutexGuard<'static, BuildScript<Stdout>> {
+fn build_script() -> MutexGuard<'static, BuildScript<'static>> {
     lock_mutex(BUILD_SCRIPT.lock())
 }
 
