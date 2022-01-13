@@ -61,7 +61,6 @@ impl Instruction {
     }
 }
 
-#[allow(clippy::collapsible_if)]
 impl fmt::Display for Instruction {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         if let Some(name) = &self.name {
