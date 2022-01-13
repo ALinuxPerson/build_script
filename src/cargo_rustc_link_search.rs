@@ -35,15 +35,15 @@ impl Kind {
     pub const ALL: &'static str = "all";
 }
 
-#[allow(clippy::from_over_into)]
-impl Into<String> for Kind {
-    fn into(self) -> String {
-        match self {
-            Self::Dependency => Self::DEPENDENCY.into(),
-            Self::Crate => Self::CRATE.into(),
-            Self::Native => Self::NATIVE.into(),
-            Self::Framework => Self::FRAMEWORK.into(),
-            Self::All => Self::ALL.into(),
+
+impl From<Kind> for String {
+    fn from(kind: Kind) -> Self {
+        match kind {
+            Kind::Dependency => Kind::DEPENDENCY.into(),
+            Kind::Crate => Kind::CRATE.into(),
+            Kind::Native => Kind::NATIVE.into(),
+            Kind::Framework => Kind::FRAMEWORK.into(),
+            Kind::All => Kind::ALL.into(),
         }
     }
 }
