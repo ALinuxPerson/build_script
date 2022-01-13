@@ -203,7 +203,7 @@ mod tests {
     use crate::{Instruction, Value};
 
     fn parse_bytes_to_lines(bytes: &[u8]) -> Vec<String> {
-        let bytes = String::from_utf8_lossy(&bytes).to_string();
+        let bytes = String::from_utf8_lossy(bytes).to_string();
         bytes.lines().map(str::to_owned).collect()
     }
 
@@ -226,8 +226,7 @@ mod tests {
         let mut build_script = BuildScript::new(&mut writer);
         build_script.now();
         build_script.cargo_mapping("key", "value");
-        // let output = get_from_vec(parse_bytes_to_lines(writer), 0);
-        let output = &parse_bytes_to_lines(writer)[0];
+        let output = &parse_bytes_to_lines(&writer)[0];
         assert_eq!(output, "cargo:key=value")
     }
 
@@ -238,7 +237,7 @@ mod tests {
         build_script.cargo_mapping("key", "value");
         build_script.cargo_mapping("second", "mapping");
         build_script.build();
-        let lines = parse_bytes_to_lines(writer);
+        let lines = parse_bytes_to_lines(&writer);
         let expected = vec![
             "cargo:key=value".to_string(),
             "cargo:second=mapping".to_string(),
@@ -253,7 +252,7 @@ mod tests {
         build_script
             .cargo_rerun_if_changed("library.h".into())
             .build();
-        let output = &parse_bytes_to_lines(writer)[0];
+        let output = &parse_bytes_to_lines(&writer)[0];
         let expected = "cargo:rerun-if-changed=library.h";
         assert_eq!(output, expected)
     }
@@ -263,7 +262,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_rerun_if_env_changed("ENV").build();
-        let output = &parse_bytes_to_lines(writer)[0];
+        let output = &parse_bytes_to_lines(&writer)[0];
         let expected = "cargo:rerun-if-env-changed=ENV";
         assert_eq!(output, expected)
     }
@@ -279,7 +278,7 @@ mod tests {
         build_script.cargo_rustc_link_lib(Kind::Static.into(), "third");
         build_script.cargo_rustc_link_lib(Kind::DynamicLibrary.into(), "fourth");
         build_script.build();
-        let output = parse_bytes_to_lines(writer);
+        let output = parse_bytes_to_lines(&writer);
         let expected = vec![
             "cargo:rustc-link-lib=first",
             "cargo:rustc-link-lib=framework=second",
@@ -303,7 +302,7 @@ mod tests {
         build_script.cargo_rustc_link_search(Kind::Dependency.into(), "fifth".into());
         build_script.cargo_rustc_link_search(None, "sixth".into());
         build_script.build();
-        let output = parse_bytes_to_lines(writer);
+        let output = parse_bytes_to_lines(&writer);
         let expected = vec![
             "cargo:rustc-link-search=framework=first",
             "cargo:rustc-link-search=all=second",
@@ -321,7 +320,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_rustc_flags("flags").build();
-        let output = &parse_bytes_to_lines(writer)[0];
+        let output = &parse_bytes_to_lines(&writer)[0];
         let expected = "cargo:rustc-flags=flags";
 
         assert_eq!(output, expected)
@@ -334,7 +333,7 @@ mod tests {
         build_script.cargo_rustc_cfg("key", None);
         build_script.cargo_rustc_cfg("key", "value".into());
         build_script.build();
-        let output = parse_bytes_to_lines(writer);
+        let output = parse_bytes_to_lines(&writer);
         let expected = vec!["cargo:rustc-cfg=key", "cargo:rustc-cfg=key=\"value\""];
 
         assert_eq!(output, expected)
@@ -345,7 +344,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_rustc_env("var", "value").build();
-        let output = &parse_bytes_to_lines(writer)[0];
+        let output = &parse_bytes_to_lines(&writer)[0];
         let expected = "cargo:rustc-env=var=value";
 
         assert_eq!(output, expected)
@@ -356,7 +355,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_rustc_cdylib_link_arg("flag").build();
-        let output = &parse_bytes_to_lines(writer)[0];
+        let output = &parse_bytes_to_lines(&writer)[0];
         let expected = "cargo:rustc-cdylib-link-arg=flag";
 
         assert_eq!(output, expected)
@@ -367,7 +366,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_warning("message").build();
-        let output = &parse_bytes_to_lines(writer)[0];
+        let output = &parse_bytes_to_lines(&writer)[0];
         let expected = "cargo:warning=message";
 
         assert_eq!(output, expected)
@@ -378,7 +377,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_mapping("key", "value").build();
-        let output = &parse_bytes_to_lines(writer)[0];
+        let output = &parse_bytes_to_lines(&writer)[0];
         let expected = "cargo:key=value";
 
         assert_eq!(output, expected)
@@ -391,7 +390,7 @@ mod tests {
         let instruction =
             Instruction::new("some-instruction", Value::Singular("Hello, World!".into()));
         build_script.custom_instruction(instruction).build();
-        let output = &parse_bytes_to_lines(writer)[0];
+        let output = &parse_bytes_to_lines(&writer)[0];
         let expected = "cargo:some-instruction=Hello, World!";
 
         assert_eq!(output, expected)
