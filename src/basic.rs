@@ -6,9 +6,9 @@ use crate::{
     cargo_rustc_link_lib as cargo_rustc_link_lib_,
     cargo_rustc_link_search as cargo_rustc_link_search_,
 };
+use once_cell::sync::Lazy;
 use std::path::PathBuf;
 use std::sync::{LockResult, Mutex, MutexGuard};
-use once_cell::sync::Lazy;
 
 static BUILD_SCRIPT: Lazy<Mutex<BuildScript>> = Lazy::new(|| {
     let mut build_script = BuildScript::default();
