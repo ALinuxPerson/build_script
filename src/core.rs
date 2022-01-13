@@ -207,12 +207,6 @@ mod tests {
         bytes.lines().map(str::to_owned).collect()
     }
 
-    fn get_from_vec<T>(vec: Vec<T>, index: usize) -> T {
-        vec.into_iter()
-            .nth(index)
-            .expect("there was supposed to be an element here")
-    }
-
     #[test]
     fn test_new() {
         let mut writer = Vec::new();
@@ -232,7 +226,8 @@ mod tests {
         let mut build_script = BuildScript::new(&mut writer);
         build_script.now();
         build_script.cargo_mapping("key", "value");
-        let output = get_from_vec(parse_bytes_to_lines(writer), 0);
+        // let output = get_from_vec(parse_bytes_to_lines(writer), 0);
+        let output = &parse_bytes_to_lines(writer)[0];
         assert_eq!(output, "cargo:key=value")
     }
 
@@ -258,7 +253,7 @@ mod tests {
         build_script
             .cargo_rerun_if_changed("library.h".into())
             .build();
-        let output = get_from_vec(parse_bytes_to_lines(writer), 0);
+        let output = &parse_bytes_to_lines(writer)[0];
         let expected = "cargo:rerun-if-changed=library.h";
         assert_eq!(output, expected)
     }
@@ -268,7 +263,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_rerun_if_env_changed("ENV").build();
-        let output = get_from_vec(parse_bytes_to_lines(writer), 0);
+        let output = &parse_bytes_to_lines(writer)[0];
         let expected = "cargo:rerun-if-env-changed=ENV";
         assert_eq!(output, expected)
     }
@@ -326,7 +321,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_rustc_flags("flags").build();
-        let output = get_from_vec(parse_bytes_to_lines(writer), 0);
+        let output = &parse_bytes_to_lines(writer)[0];
         let expected = "cargo:rustc-flags=flags";
 
         assert_eq!(output, expected)
@@ -350,7 +345,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_rustc_env("var", "value").build();
-        let output = get_from_vec(parse_bytes_to_lines(writer), 0);
+        let output = &parse_bytes_to_lines(writer)[0];
         let expected = "cargo:rustc-env=var=value";
 
         assert_eq!(output, expected)
@@ -361,7 +356,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_rustc_cdylib_link_arg("flag").build();
-        let output = get_from_vec(parse_bytes_to_lines(writer), 0);
+        let output = &parse_bytes_to_lines(writer)[0];
         let expected = "cargo:rustc-cdylib-link-arg=flag";
 
         assert_eq!(output, expected)
@@ -372,7 +367,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_warning("message").build();
-        let output = get_from_vec(parse_bytes_to_lines(writer), 0);
+        let output = &parse_bytes_to_lines(writer)[0];
         let expected = "cargo:warning=message";
 
         assert_eq!(output, expected)
@@ -383,7 +378,7 @@ mod tests {
         let mut writer = Vec::new();
         let mut build_script = BuildScript::new(&mut writer);
         build_script.cargo_mapping("key", "value").build();
-        let output = get_from_vec(parse_bytes_to_lines(writer), 0);
+        let output = &parse_bytes_to_lines(writer)[0];
         let expected = "cargo:key=value";
 
         assert_eq!(output, expected)
@@ -396,7 +391,7 @@ mod tests {
         let instruction =
             Instruction::new("some-instruction", Value::Singular("Hello, World!".into()));
         build_script.custom_instruction(instruction).build();
-        let output = get_from_vec(parse_bytes_to_lines(writer), 0);
+        let output = &parse_bytes_to_lines(writer)[0];
         let expected = "cargo:some-instruction=Hello, World!";
 
         assert_eq!(output, expected)
