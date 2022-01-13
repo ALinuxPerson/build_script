@@ -6,7 +6,6 @@ use crate::{
     cargo_rustc_link_lib as cargo_rustc_link_lib_,
     cargo_rustc_link_search as cargo_rustc_link_search_,
 };
-use std::io::Stdout;
 use std::path::PathBuf;
 use std::sync::{LockResult, Mutex, MutexGuard};
 use once_cell::sync::Lazy;

@@ -6,7 +6,6 @@ use crate::cargo_rustc_link_lib;
 use crate::cargo_rustc_link_search;
 use crate::utils::VecExt;
 use crate::{Instruction, Value};
-use std::io::Stdout;
 use std::path::PathBuf;
 use std::{io, str};
 
