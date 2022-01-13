@@ -35,16 +35,22 @@ impl Kind {
     pub const ALL: &'static str = "all";
 }
 
+impl From<Kind> for &'static str {
+    fn from(kind: Kind) -> Self {
+        match kind {
+            Kind::Dependency => Kind::DEPENDENCY,
+            Kind::Crate => Kind::CRATE,
+            Kind::Native => Kind::NATIVE,
+            Kind::Framework => Kind::FRAMEWORK,
+            Kind::All => Kind::ALL,
+        }
+    }
+}
 
 impl From<Kind> for String {
     fn from(kind: Kind) -> Self {
-        match kind {
-            Kind::Dependency => Kind::DEPENDENCY.into(),
-            Kind::Crate => Kind::CRATE.into(),
-            Kind::Native => Kind::NATIVE.into(),
-            Kind::Framework => Kind::FRAMEWORK.into(),
-            Kind::All => Kind::ALL.into(),
-        }
+        let kind: &str = kind.into();
+        kind.into()
     }
 }
 
