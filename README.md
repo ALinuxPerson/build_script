@@ -18,7 +18,7 @@ I made this because I felt like the way you pass instructions to `build.rs` make
 Add this to your `Cargo.toml`:
 ```toml
 [build-dependencies]
-build_script = "0.1.4"
+build_script = "0.2.0"
 ```
 
 # Examples
