@@ -6,59 +6,59 @@
 use std::env::{var, VarError};
 
 /// Path to the cargo binary performing the build.
-const CARGO: &str = "CARGO";
+pub const CARGO: &str = "CARGO";
 /// The directory containing the manifest for the package being built (the package containing the build script). Also note that this is the value of the current working directory of the build script when it starts.
-const CARGO_MANIFEST_DIR: &str = "CARGO_MANIFEST_DIR";
+pub const CARGO_MANIFEST_DIR: &str = "CARGO_MANIFEST_DIR";
 /// the manifest links value.
-const CARGO_MANIFEST_LINKS: &str = "CARGO_MANIFEST_LINKS";
+pub const CARGO_MANIFEST_LINKS: &str = "CARGO_MANIFEST_LINKS";
 /// Contains parameters needed for Cargo’s jobserver implementation to parallelize subprocesses. Rustc or cargo invocations from build.rs can already read CARGO_MAKEFLAGS, but GNU Make requires the flags to be specified either directly as arguments, or through the MAKEFLAGS environment variable. Currently Cargo doesn’t set the MAKEFLAGS variable, but it’s free for build scripts invoking GNU Make to set it to the contents of CARGO_MAKEFLAGS.
-const CARGO_MAKEFLAGS: &str = "CARGO_MAKEFLAGS";
+pub const CARGO_MAKEFLAGS: &str = "CARGO_MAKEFLAGS";
 /// Set on UNIX-like platforms.
-const CARGO_CFG_UNIX: &str = "CARGO_CFG_UNIX";
+pub const CARGO_CFG_UNIX: &str = "CARGO_CFG_UNIX";
 /// Set on windows-like platforms.
-const CARGO_CFG_WINDOWS: &str = "CARGO_CFG_WINDOWS";
+pub const CARGO_CFG_WINDOWS: &str = "CARGO_CFG_WINDOWS";
 /// The target family.
-const CARGO_CFG_TARGET_FAMILY: &str = "CARGO_CFG_TARGET_FAMILY";
+pub const CARGO_CFG_TARGET_FAMILY: &str = "CARGO_CFG_TARGET_FAMILY";
 /// The target operating system.
-const CARGO_CFG_TARGET_OS: &str = "CARGO_CFG_TARGET_OS";
+pub const CARGO_CFG_TARGET_OS: &str = "CARGO_CFG_TARGET_OS";
 /// The CPU target architecture.
-const CARGO_CFG_TARGET_ARCH86_64: &str = "CARGO_CFG_TARGET_ARCH86_64";
+pub const CARGO_CFG_TARGET_ARCH86_64: &str = "CARGO_CFG_TARGET_ARCH86_64";
 /// The target vendor.
-const CARGO_CFG_TARGET_VENDOR: &str = "CARGO_CFG_TARGET_VENDOR";
+pub const CARGO_CFG_TARGET_VENDOR: &str = "CARGO_CFG_TARGET_VENDOR";
 /// The target environment ABI.
-const CARGO_CFG_TARGET_ENV: &str = "CARGO_CFG_TARGET_ENV";
+pub const CARGO_CFG_TARGET_ENV: &str = "CARGO_CFG_TARGET_ENV";
 /// The CPU pointer width.
-const CARGO_CFG_TARGET_POINTER_WIDTH: &str = "CARGO_CFG_TARGET_POINTER_WIDTH";
+pub const CARGO_CFG_TARGET_POINTER_WIDTH: &str = "CARGO_CFG_TARGET_POINTER_WIDTH";
 /// The CPU target endianness.
-const CARGO_CFG_TARGET_ENDIAN: &str = "CARGO_CFG_TARGET_ENDIAN";
+pub const CARGO_CFG_TARGET_ENDIAN: &str = "CARGO_CFG_TARGET_ENDIAN";
 /// List of CPU target features enabled.
-const CARGO_CFG_TARGET_FEATURE: &str = "CARGO_CFG_TARGET_FEATURE";
+pub const CARGO_CFG_TARGET_FEATURE: &str = "CARGO_CFG_TARGET_FEATURE";
 /// the folder in which all output and intermediate artifacts should be placed. This folder is inside the build directory for the package being built, and it is unique for the package in question.
-const OUT_DIR: &str = "OUT_DIR";
+pub const OUT_DIR: &str = "OUT_DIR";
 /// the target triple that is being compiled for. Native code should be compiled for this triple. See the Target Triple description for more information.
-const TARGET: &str = "TARGET";
+pub const TARGET: &str = "TARGET";
 /// the host triple of the Rust compiler.
-const HOST: &str = "HOST";
+pub const HOST: &str = "HOST";
 /// the parallelism specified as the top-level parallelism. This can be useful to pass a -j parameter to a system like make. Note that care should be taken when interpreting this environment variable. For historical purposes this is still provided but recent versions of Cargo, for example, do not need to run make -j, and instead can set the MAKEFLAGS env var to the content of CARGO_MAKEFLAGS to activate the use of Cargo’s GNU Make compatible jobserver for sub-make invocations.
-const NUM_JOBS: &str = "NUM_JOBS";
+pub const NUM_JOBS: &str = "NUM_JOBS";
 /// — values of the corresponding variables for the profile currently being built.
-const OPT_LEVEL: &str = "OPT_LEVEL";
+pub const OPT_LEVEL: &str = "OPT_LEVEL";
 /// Set when building with debug profile
-const DEBUG: &str = "DEBUG";
+pub const DEBUG: &str = "DEBUG";
 /// release for release builds, debug for other builds. This is determined based on if the profile inherits from the dev or release profile. Using this environment variable is not recommended. Using other environment variables like OPT_LEVEL provide a more correct view of the actual settings being used.
-const PROFILE: &str = "PROFILE";
+pub const PROFILE: &str = "PROFILE";
 /// The compiler that Cargo has resolved to use, passed to the build script so it might use it as well.
-const RUSTC: &str = "RUSTC";
+pub const RUSTC: &str = "RUSTC";
 /// The documentation generator that Cargo has resolved to use, passed to the build script so it might use it as well.
-const RUSTDOC: &str = "RUSTDOC";
+pub const RUSTDOC: &str = "RUSTDOC";
 /// the rustc wrapper, if any, that Cargo is using. See build.rustc-wrapper.
-const RUSTC_WRAPPER: &str = "RUSTC_WRAPPER";
+pub const RUSTC_WRAPPER: &str = "RUSTC_WRAPPER";
 /// the rustc wrapper, if any, that Cargo is using for workspace members. See build.rustc-workspace-wrapper.
-const RUSTC_WORKSPACE_WRAPPER: &str = "RUSTC_WORKSPACE_WRAPPER";
+pub const RUSTC_WORKSPACE_WRAPPER: &str = "RUSTC_WORKSPACE_WRAPPER";
 /// The path to the linker binary that Cargo has resolved to use for the current target, if specified. The linker can be changed by editing .cargo/config.toml; see the documentation about cargo configuration for more information.
-const RUSTC_LINKER: &str = "RUSTC_LINKER";
+pub const RUSTC_LINKER: &str = "RUSTC_LINKER";
 /// extra flags that Cargo invokes rustc with, separated by a 0x1f character (ASCII Unit Separator). See build.rustflags. Note that since Rust 1.55, RUSTFLAGS is removed from the environment; scripts should use CARGO_ENCODED_RUSTFLAGS instead.
-const CARGO_ENCODED_RUSTFLAGS: &str = "CARGO_ENCODED_RUSTFLAGS";
+pub const CARGO_ENCODED_RUSTFLAGS: &str = "CARGO_ENCODED_RUSTFLAGS";
 
 /// The path to the cargo command
 pub fn cargo_var_cargo() -> Result<String, VarError> {
