@@ -36,6 +36,7 @@ pub mod basic;
 pub mod cargo_rustc_link_lib;
 pub mod cargo_rustc_link_search;
 pub mod core;
+pub mod env;
 pub mod instruction;
 pub mod prefix;
 mod utils;
